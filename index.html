@@ -3,41 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>神椿TCG 魔力管理(Mobile)</title>
+<title>神椿TCG 魔力管理（Mobile）</title>
 
 <style>
-:root{
-  --bg:#f4f4f4;
-  --card:#ffffff;
-  --text:#000;
-  --border:#ccc;
-}
-
-*{
-  box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
-  height:100svh;
   overflow:hidden;
-  background:var(--bg);
-  color:var(--text);
   font-family:sans-serif;
+  background:#f4f4f4;
 }
 
-/* ===== 全体 ===== */
-.app{
-  height:100svh;
+/* ===== 画面固定 ===== */
+#top, #middle, #bottom{
+  position:fixed;
+  left:0;
+  width:100%;
+}
+
+/* ===== 上半分 ===== */
+#top{
+  top:0;
+  height:42%;
+  background:#fff;
+  border-bottom:1px solid #ccc;
+}
+
+/* ===== 下半分 ===== */
+#middle{
+  top:42%;
+  height:42%;
+  background:#fff;
+  border-bottom:1px solid #ccc;
+}
+
+/* ===== 操作バー ===== */
+#bottom{
+  bottom:0;
+  height:16%;
+  background:#fff;
+  border-top:1px solid #ccc;
   display:flex;
-  flex-direction:column;
+  align-items:center;
+  justify-content:space-around;
 }
 
 /* ===== プレイヤー ===== */
 .player{
-  flex:1;
-  background:var(--card);
-  border-bottom:1px solid var(--border);
+  height:100%;
   padding:6px;
   display:flex;
   flex-direction:column;
@@ -45,10 +59,9 @@ body{
 }
 
 .name{
-  font-size:18px;
   text-align:center;
+  font-size:18px;
   border:none;
-  background:transparent;
   font-weight:bold;
 }
 
@@ -59,14 +72,12 @@ body{
 
 .vol .value{
   font-size:36px;
-  margin:2px 0;
 }
 
 .vol button{
-  width:56px;
-  height:56px;
+  width:52px;
+  height:52px;
   font-size:24px;
-  margin:0 6px;
 }
 
 /* ===== 魔力 ===== */
@@ -77,10 +88,6 @@ body{
 
 .stat{
   text-align:center;
-}
-
-.stat .label{
-  font-size:14px;
 }
 
 .stat .value{
@@ -94,115 +101,94 @@ body{
 }
 
 /* ===== 色 ===== */
-.alpha{ color:#e53935; }
-.beta{ color:#1e88e5; }
-.omega{ color:#8e24aa; }
-.volc{ color:#2e7d32; }
-
-/* ===== 下操作（1ブロックのみ） ===== */
-.control{
-  height:72px;
-  background:var(--card);
-  border-top:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-}
+.alpha{color:#e53935;}
+.beta{color:#1e88e5;}
+.omega{color:#8e24aa;}
+.volc{color:#2e7d32;}
 
 .dice{
   font-size:32px;
-}
-
-.control button{
-  font-size:16px;
-  padding:8px 10px;
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-  <!-- Player 1 -->
+<div id="top">
   <div class="player">
     <input class="name" id="p1_name" placeholder="Player 1">
 
     <div class="vol volc">
       <div>VOL</div>
       <div class="value" id="p1_vol">0</div>
-      <div>
-        <button onclick="change('p1','vol',-1)">－</button>
-        <button onclick="change('p1','vol',1)">＋</button>
-      </div>
+      <button onclick="change('p1','vol',-1)">－</button>
+      <button onclick="change('p1','vol',1)">＋</button>
     </div>
 
     <div class="stats">
       <div class="stat alpha">
-        <div class="label">α</div>
+        <div>α</div>
         <div class="value" id="p1_alpha">0</div>
         <button onclick="change('p1','alpha',-1)">－</button>
         <button onclick="change('p1','alpha',1)">＋</button>
       </div>
       <div class="stat beta">
-        <div class="label">β</div>
+        <div>β</div>
         <div class="value" id="p1_beta">0</div>
         <button onclick="change('p1','beta',-1)">－</button>
         <button onclick="change('p1','beta',1)">＋</button>
       </div>
       <div class="stat omega">
-        <div class="label">Ω</div>
+        <div>Ω</div>
         <div class="value" id="p1_omega">0</div>
         <button onclick="change('p1','omega',-1)">－</button>
         <button onclick="change('p1','omega',1)">＋</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Player 2 -->
+<div id="middle">
   <div class="player">
     <input class="name" id="p2_name" placeholder="Player 2">
 
     <div class="vol volc">
       <div>VOL</div>
       <div class="value" id="p2_vol">0</div>
-      <div>
-        <button onclick="change('p2','vol',-1)">－</button>
-        <button onclick="change('p2','vol',1)">＋</button>
-      </div>
+      <button onclick="change('p2','vol',-1)">－</button>
+      <button onclick="change('p2','vol',1)">＋</button>
     </div>
 
     <div class="stats">
       <div class="stat alpha">
-        <div class="label">α</div>
+        <div>α</div>
         <div class="value" id="p2_alpha">0</div>
         <button onclick="change('p2','alpha',-1)">－</button>
         <button onclick="change('p2','alpha',1)">＋</button>
       </div>
       <div class="stat beta">
-        <div class="label">β</div>
+        <div>β</div>
         <div class="value" id="p2_beta">0</div>
         <button onclick="change('p2','beta',-1)">－</button>
         <button onclick="change('p2','beta',1)">＋</button>
       </div>
       <div class="stat omega">
-        <div class="label">Ω</div>
+        <div>Ω</div>
         <div class="value" id="p2_omega">0</div>
         <button onclick="change('p2','omega',-1)">－</button>
         <button onclick="change('p2','omega',1)">＋</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 下操作 -->
-  <div class="control">
-    <button onclick="setTheme('white')">🤍</button>
-    <button onclick="setTheme('dark')">🌙</button>
-    <button onclick="setTheme('green')">🌿</button>
-    <div class="dice" id="dice">–</div>
-    <button onclick="rollDice()">🎲</button>
-    <button onclick="resetAll()">Reset</button>
-  </div>
-
+<div id="bottom">
+  <button onclick="setTheme('white')">🤍</button>
+  <button onclick="setTheme('dark')">🌙</button>
+  <button onclick="setTheme('green')">🌿</button>
+  <div class="dice" id="dice">–</div>
+  <button onclick="rollDice()">🎲</button>
+  <button onclick="resetAll()">Reset</button>
 </div>
 
 <script>
@@ -210,11 +196,10 @@ const stats=["alpha","beta","omega","vol"];
 
 function change(p,s,v){
   const el=document.getElementById(`${p}_${s}`);
-  let val=Number(el.textContent)+v;
-  if(val<0) val=0;
-  if(s!=="vol" && val>5) val=5;
-  el.textContent=val;
-  save();
+  let n=Number(el.textContent)+v;
+  if(n<0) n=0;
+  if(s!=="vol" && n>5) n=5;
+  el.textContent=n;
 }
 
 function rollDice(){
@@ -232,52 +217,14 @@ function resetAll(){
       document.getElementById(`${p}_${s}`).textContent=0;
     });
   });
-  save();
 }
 
 function setTheme(t){
-  if(t==="dark"){
-    document.documentElement.style.setProperty("--bg","#000");
-    document.documentElement.style.setProperty("--card","#111");
-    document.documentElement.style.setProperty("--text","#fff");
-    document.documentElement.style.setProperty("--border","#333");
-  }else if(t==="green"){
-    document.documentElement.style.setProperty("--bg","#e8f5e9");
-    document.documentElement.style.setProperty("--card","#ffffff");
-    document.documentElement.style.setProperty("--text","#1b5e20");
-    document.documentElement.style.setProperty("--border","#81c784");
-  }else{
-    document.documentElement.style.setProperty("--bg","#f4f4f4");
-    document.documentElement.style.setProperty("--card","#ffffff");
-    document.documentElement.style.setProperty("--text","#000");
-    document.documentElement.style.setProperty("--border","#ccc");
-  }
+  if(t==="dark") document.body.style.background="#000";
+  if(t==="green") document.body.style.background="#e8f5e9";
+  if(t==="white") document.body.style.background="#f4f4f4";
 }
-
-function save(){
-  const d={};
-  ["p1","p2"].forEach(p=>{
-    d[p]={name:document.getElementById(`${p}_name`).value};
-    stats.forEach(s=>{
-      d[p][s]=document.getElementById(`${p}_${s}`).textContent;
-    });
-  });
-  localStorage.setItem("kamitsubaki_sp",JSON.stringify(d));
-}
-
-function load(){
-  const d=JSON.parse(localStorage.getItem("kamitsubaki_sp"));
-  if(!d) return;
-  ["p1","p2"].forEach(p=>{
-    document.getElementById(`${p}_name`).value=d[p].name||"";
-    stats.forEach(s=>{
-      document.getElementById(`${p}_${s}`).textContent=d[p][s]||0;
-    });
-  });
-}
-
-document.addEventListener("input",save);
-load();
 </script>
+
 </body>
 </html>
