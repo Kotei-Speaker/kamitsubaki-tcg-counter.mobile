@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>神椿TCG 魔力管理（Mobile）</title>
+
+<style>
+:root{
+  --bg:#f4f4f4;
+  --card:#ffffff;
+  --text:#000;
+  --border:#ccc;
+}
+
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#eee;
+  --border:#333;
+}
+
+body.green{
+  --bg:#e8f3ec;
+  --card:#f6fffa;
+  --text:#063;
+  --border:#9fcdb8;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:sans-serif;
+  height:100vh;
+  overflow:hidden;
+}
+
+.app{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+}
+
+/* ===== プレイヤー ===== */
+.player{
+  flex:1;
+  background:var(--card);
+  border-bottom:2px solid var(--border);
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.name{
+  font-size:22px;
+  text-align:center;
+  border:none;
+  outline:none;
+  background:transparent;
+  font-weight:bold;
+  color:var(--text);
+}
+
+/* ===== VOL ===== */
+.vol{
+  text-align:center;
+}
+
+.vol .value{
+  font-size:48px;
+  margin:6px 0;
+}
+
+.vol button{
+  font-size:28px;
+  width:70px;
+  height:70px;
+  margin:0 10px;
+}
+
+/* ===== 魔力 ===== */
+.stats{
+  display:flex;
+  justify-content:space-around;
+}
+
+.stat{
+  text-align:center;
+}
+
+.stat .label{
+  font-size:16px;
+}
+
+.stat .value{
+  font-size:26px;
+  margin:4px 0;
+}
+
+.stat button{
+  width:56px;
+  height:56px;
+  font-size:24px;
+}
+
+/* ===== 色 ===== */
+.alpha{ color:#e53935; }
+.beta{ color:#1e88e5; }
+.omega{ color:#8e24aa; }
+.volc{ color:#fbc02d; }
+
+/* ===== 下操作バー ===== */
+.control{
+  height:14vh;
+  border-top:2px solid var(--border);
+  background:var(--card);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+}
+
+.control-left,
+.control-center,
+.control-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.control-left{
+  width:1px; /* 左のダミー。中央を真ん中に固定する */
+}
+
+.control-center{
+  flex:1;
+  justify-content:center;
+}
+
+.control-right{
+  justify-content:flex-end;
+}
+
+
+.control-left,
+.control-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.dice{
+  font-size:42px;
+  width:48px;
+  text-align:center;
+}
+
+.control button{
+  font-size:20px;
+  padding:10px 14px;
+}
+
+/* ===== 表記 ===== */
+.legal{
+  position:fixed;
+  right:6px;
+  bottom:6px;
+  font-size:11px;
+  color:#aaa;
+  text-align:right;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- Player 1 -->
+  <div class="player" id="p1">
+    <input class="name" id="p1_name" placeholder="Player 1">
+
+    <div class="vol volc">
+      <div>VOL</div>
+      <div class="value" id="p1_vol">0</div>
+      <div>
+        <button onclick="change('p1','vol',-1)">－</button>
+        <button onclick="change('p1','vol',1)">＋</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat alpha">
+        <div class="label">α</div>
+        <div class="value" id="p1_alpha">0</div>
+        <button onclick="change('p1','alpha',-1)">－</button>
+        <button onclick="change('p1','alpha',1)">＋</button>
+      </div>
+      <div class="stat beta">
+        <div class="label">β</div>
+        <div class="value" id="p1_beta">0</div>
+        <button onclick="change('p1','beta',-1)">－</button>
+        <button onclick="change('p1','beta',1)">＋</button>
+      </div>
+      <div class="stat omega">
+        <div class="label">Ω</div>
+        <div class="value" id="p1_omega">0</div>
+        <button onclick="change('p1','omega',-1)">－</button>
+        <button onclick="change('p1','omega',1)">＋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player 2 -->
+  <div class="player" id="p2">
+    <input class="name" id="p2_name" placeholder="Player 2">
+
+    <div class="vol volc">
+      <div>VOL</div>
+      <div class="value" id="p2_vol">0</div>
+      <div>
+        <button onclick="change('p2','vol',-1)">－</button>
+        <button onclick="change('p2','vol',1)">＋</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat alpha">
+        <div class="label">α</div>
+        <div class="value" id="p2_alpha">0</div>
+        <button onclick="change('p2','alpha',-1)">－</button>
+        <button onclick="change('p2','alpha',1)">＋</button>
+      </div>
+      <div class="stat beta">
+        <div class="label">β</div>
+        <div class="value" id="p2_beta">0</div>
+        <button onclick="change('p2','beta',-1)">－</button>
+        <button onclick="change('p2','beta',1)">＋</button>
+      </div>
+      <div class="stat omega">
+        <div class="label">Ω</div>
+        <div class="value" id="p2_omega">0</div>
+        <button onclick="change('p2','omega',-1)">－</button>
+        <button onclick="change('p2','omega',1)">＋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 操作バー -->
+<div class="control">
+  <div class="control-left"></div>
+
+  <div class="control-center">
+    <div class="dice" id="dice">–</div>
+    <button onclick="rollDice()">🎲</button>
+    <button onclick="resetAll()">Reset</button>
+  </div>
+
+  <div class="control-right">
+    <button onclick="setTheme('white')">🤍</button>
+    <button onclick="setTheme('dark')">🌙</button>
+    <button onclick="setTheme('green')">🌿</button>
+  </div>
+</div>
+
+
+</div>
+
+<div class="legal">
+  ※このサイトは非公式のファンメイドツールです。<br>
+  神椿スタジオおよび公式TCGとは関係ありません。
+</div>
+
+<script>
+const stats=["alpha","beta","omega","vol"];
+
+function change(p,s,v){
+  const el=document.getElementById(`${p}_${s}`);
+  let value=Number(el.textContent)+v;
+  if(value<0) value=0;
+  if(s!=="vol" && value>5) value=5;
+  el.textContent=value;
+  save();
+}
+
+function rollDice(){
+  const dice=document.getElementById("dice");
+  let c=0;
+  const t=setInterval(()=>{
+    dice.textContent=Math.floor(Math.random()*6)+1;
+    if(++c>10) clearInterval(t);
+  },60);
+}
+
+function resetAll(){
+  ["p1","p2"].forEach(p=>{
+    stats.forEach(s=>{
+      document.getElementById(`${p}_${s}`).textContent=0;
+    });
+  });
+  save();
+}
+
+function setTheme(t){
+  document.body.className="";
+  if(t!=="white") document.body.classList.add(t);
+  localStorage.setItem("theme",t);
+}
+
+function save(){
+  const data={};
+  ["p1","p2"].forEach(p=>{
+    data[p]={name:document.getElementById(`${p}_name`).value};
+    stats.forEach(s=>{
+      data[p][s]=document.getElementById(`${p}_${s}`).textContent;
+    });
+  });
+  localStorage.setItem("kamitsubaki_sp",JSON.stringify(data));
+}
+
+function load(){
+  const data=JSON.parse(localStorage.getItem("kamitsubaki_sp"));
+  if(data){
+    ["p1","p2"].forEach(p=>{
+      document.getElementById(`${p}_name`).value=data[p].name||"";
+      stats.forEach(s=>{
+        document.getElementById(`${p}_${s}`).textContent=data[p][s]||0;
+      });
+    });
+  }
+  const theme=localStorage.getItem("theme");
+  if(theme) setTheme(theme);
+}
+
+document.addEventListener("input",save);
+load();
+</script>
+</body>
+</html>
