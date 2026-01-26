@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>神椿TCG 魔力管理（スマホ）</title>
+<title>神椿TCG 魔力管理（Mobile）</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 :root{
   --bg:#f4f4f4;
   --card:#ffffff;
@@ -30,12 +34,14 @@ body.green{
 html,body{
   margin:0;
   padding:0;
+  height:100%;
 }
 
 body{
   background:var(--bg);
   color:var(--text);
   font-family:sans-serif;
+  overflow:hidden; /* スクロール完全禁止 */
 }
 
 /* ===== 全体 ===== */
@@ -45,32 +51,27 @@ body{
   flex-direction:column;
 }
 
-/* ===== プレイヤー横並び ===== */
-.players{
-  flex:1;
-  display:flex;
-}
-
+/* ===== プレイヤー ===== */
 .player{
   flex:1;
   background:var(--card);
-  border-right:2px solid var(--border);
-  padding:6px;
+  border-bottom:2px solid var(--border);
+  padding:8px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 }
 
 .player:last-child{
-  border-right:none;
+  border-bottom:none;
 }
 
 .name{
-  text-align:center;
   font-size:20px;
-  font-weight:bold;
+  text-align:center;
   border:none;
   background:transparent;
+  font-weight:bold;
   color:var(--text);
 }
 
@@ -80,14 +81,15 @@ body{
 }
 
 .vol .value{
-  font-size:44px;
+  font-size:42px;
+  margin:4px 0;
 }
 
 .vol button{
   width:64px;
   height:64px;
   font-size:26px;
-  margin:0 8px;
+  margin:0 10px;
 }
 
 /* ===== 魔力 ===== */
@@ -102,11 +104,12 @@ body{
 
 .stat .value{
   font-size:24px;
+  margin:4px 0;
 }
 
 .stat button{
-  width:54px;
-  height:54px;
+  width:52px;
+  height:52px;
   font-size:22px;
 }
 
@@ -132,7 +135,7 @@ body{
 }
 
 .dice{
-  font-size:34px;
+  font-size:32px;
 }
 
 /* ===== フッター ===== */
@@ -148,74 +151,72 @@ body{
 <body>
 <div class="app">
 
-  <div class="players">
-    <!-- Player 1 -->
-    <div class="player">
-      <input class="name" id="p1_name" placeholder="P1">
+  <!-- Player 1 -->
+  <div class="player">
+    <input class="name" id="p1_name" placeholder="Player 1">
 
-      <div class="vol volc">
-        <div>VOL</div>
-        <div class="value" id="p1_vol">0</div>
-        <div>
-          <button onclick="change('p1','vol',-1)">－</button>
-          <button onclick="change('p1','vol',1)">＋</button>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat alpha">
-          <div>α</div>
-          <div class="value" id="p1_alpha">0</div>
-          <button onclick="change('p1','alpha',-1)">－</button>
-          <button onclick="change('p1','alpha',1)">＋</button>
-        </div>
-        <div class="stat beta">
-          <div>β</div>
-          <div class="value" id="p1_beta">0</div>
-          <button onclick="change('p1','beta',-1)">－</button>
-          <button onclick="change('p1','beta',1)">＋</button>
-        </div>
-        <div class="stat omega">
-          <div>Ω</div>
-          <div class="value" id="p1_omega">0</div>
-          <button onclick="change('p1','omega',-1)">－</button>
-          <button onclick="change('p1','omega',1)">＋</button>
-        </div>
+    <div class="vol volc">
+      <div>VOL</div>
+      <div class="value" id="p1_vol">0</div>
+      <div>
+        <button onclick="change('p1','vol',-1)">－</button>
+        <button onclick="change('p1','vol',1)">＋</button>
       </div>
     </div>
 
-    <!-- Player 2 -->
-    <div class="player">
-      <input class="name" id="p2_name" placeholder="P2">
-
-      <div class="vol volc">
-        <div>VOL</div>
-        <div class="value" id="p2_vol">0</div>
-        <div>
-          <button onclick="change('p2','vol',-1)">－</button>
-          <button onclick="change('p2','vol',1)">＋</button>
-        </div>
+    <div class="stats">
+      <div class="stat alpha">
+        <div>α</div>
+        <div class="value" id="p1_alpha">0</div>
+        <button onclick="change('p1','alpha',-1)">－</button>
+        <button onclick="change('p1','alpha',1)">＋</button>
       </div>
+      <div class="stat beta">
+        <div>β</div>
+        <div class="value" id="p1_beta">0</div>
+        <button onclick="change('p1','beta',-1)">－</button>
+        <button onclick="change('p1','beta',1)">＋</button>
+      </div>
+      <div class="stat omega">
+        <div>Ω</div>
+        <div class="value" id="p1_omega">0</div>
+        <button onclick="change('p1','omega',-1)">－</button>
+        <button onclick="change('p1','omega',1)">＋</button>
+      </div>
+    </div>
+  </div>
 
-      <div class="stats">
-        <div class="stat alpha">
-          <div>α</div>
-          <div class="value" id="p2_alpha">0</div>
-          <button onclick="change('p2','alpha',-1)">－</button>
-          <button onclick="change('p2','alpha',1)">＋</button>
-        </div>
-        <div class="stat beta">
-          <div>β</div>
-          <div class="value" id="p2_beta">0</div>
-          <button onclick="change('p2','beta',-1)">－</button>
-          <button onclick="change('p2','beta',1)">＋</button>
-        </div>
-        <div class="stat omega">
-          <div>Ω</div>
-          <div class="value" id="p2_omega">0</div>
-          <button onclick="change('p2','omega',-1)">－</button>
-          <button onclick="change('p2','omega',1)">＋</button>
-        </div>
+  <!-- Player 2 -->
+  <div class="player">
+    <input class="name" id="p2_name" placeholder="Player 2">
+
+    <div class="vol volc">
+      <div>VOL</div>
+      <div class="value" id="p2_vol">0</div>
+      <div>
+        <button onclick="change('p2','vol',-1)">－</button>
+        <button onclick="change('p2','vol',1)">＋</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat alpha">
+        <div>α</div>
+        <div class="value" id="p2_alpha">0</div>
+        <button onclick="change('p2','alpha',-1)">－</button>
+        <button onclick="change('p2','alpha',1)">＋</button>
+      </div>
+      <div class="stat beta">
+        <div>β</div>
+        <div class="value" id="p2_beta">0</div>
+        <button onclick="change('p2','beta',-1)">－</button>
+        <button onclick="change('p2','beta',1)">＋</button>
+      </div>
+      <div class="stat omega">
+        <div>Ω</div>
+        <div class="value" id="p2_omega">0</div>
+        <button onclick="change('p2','omega',-1)">－</button>
+        <button onclick="change('p2','omega',1)">＋</button>
       </div>
     </div>
   </div>
