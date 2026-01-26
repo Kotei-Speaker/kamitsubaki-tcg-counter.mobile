@@ -13,39 +13,41 @@
   --border:#ccc;
 }
 
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
+  height:100svh;
+  overflow:hidden;
   background:var(--bg);
   color:var(--text);
   font-family:sans-serif;
-  height:100dvh;
-  overflow:hidden;
 }
 
+/* ===== 全体 ===== */
 .app{
+  height:100svh;
   display:flex;
   flex-direction:column;
-  height:100dvh;
-  overflow:hidden;
 }
 
 /* ===== プレイヤー ===== */
 .player{
   flex:1;
   background:var(--card);
-  border-bottom:2px solid var(--border);
-  padding:8px;
+  border-bottom:1px solid var(--border);
+  padding:6px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  box-sizing:border-box;
 }
 
 .name{
-  font-size:22px;
+  font-size:18px;
   text-align:center;
   border:none;
-  outline:none;
   background:transparent;
   font-weight:bold;
 }
@@ -56,15 +58,15 @@ body{
 }
 
 .vol .value{
-  font-size:48px;
-  margin:6px 0;
+  font-size:36px;
+  margin:2px 0;
 }
 
 .vol button{
-  font-size:28px;
-  width:70px;
-  height:70px;
-  margin:0 10px;
+  width:56px;
+  height:56px;
+  font-size:24px;
+  margin:0 6px;
 }
 
 /* ===== 魔力 ===== */
@@ -78,18 +80,17 @@ body{
 }
 
 .stat .label{
-  font-size:16px;
+  font-size:14px;
 }
 
 .stat .value{
-  font-size:26px;
-  margin:4px 0;
+  font-size:22px;
 }
 
 .stat button{
-  width:56px;
-  height:56px;
-  font-size:24px;
+  width:44px;
+  height:44px;
+  font-size:20px;
 }
 
 /* ===== 色 ===== */
@@ -98,51 +99,23 @@ body{
 .omega{ color:#8e24aa; }
 .volc{ color:#2e7d32; }
 
-/* ===== 下コントロール ===== */
+/* ===== 下操作（1ブロックのみ） ===== */
 .control{
+  height:72px;
   background:var(--card);
-  border-top:2px solid var(--border);
-
+  border-top:1px solid var(--border);
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:8px;
-
-  padding:8px 10px;
-  box-sizing:border-box;
-}
-
-.control-left,
-.control-right{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.control-center{
-  flex:1 1 100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  justify-content:space-around;
 }
 
 .dice{
-  font-size:40px;
+  font-size:32px;
 }
 
 .control button{
-  font-size:18px;
+  font-size:16px;
   padding:8px 10px;
-}
-
-/* ===== フッター ===== */
-.footer{
-  font-size:11px;
-  color:#777;
-  text-align:right;
-  padding:4px 8px;
-  box-sizing:border-box;
 }
 </style>
 </head>
@@ -151,7 +124,7 @@ body{
 <div class="app">
 
   <!-- Player 1 -->
-  <div class="player" id="p1">
+  <div class="player">
     <input class="name" id="p1_name" placeholder="Player 1">
 
     <div class="vol volc">
@@ -186,7 +159,7 @@ body{
   </div>
 
   <!-- Player 2 -->
-  <div class="player" id="p2">
+  <div class="player">
     <input class="name" id="p2_name" placeholder="Player 2">
 
     <div class="vol volc">
@@ -222,24 +195,12 @@ body{
 
   <!-- 下操作 -->
   <div class="control">
-    <div class="control-left">
-      <button onclick="setTheme('white')">🤍</button>
-      <button onclick="setTheme('dark')">🌙</button>
-      <button onclick="setTheme('green')">🌿</button>
-    </div>
-
-    <div class="control-center">
-      <div class="dice" id="dice">–</div>
-    </div>
-
-    <div class="control-right">
-      <button onclick="rollDice()">🎲</button>
-      <button onclick="resetAll()">Reset</button>
-    </div>
-  </div>
-
-  <div class="footer">
-    ※非公式ファンメイドツール／公式TCGとは無関係
+    <button onclick="setTheme('white')">🤍</button>
+    <button onclick="setTheme('dark')">🌙</button>
+    <button onclick="setTheme('green')">🌿</button>
+    <div class="dice" id="dice">–</div>
+    <button onclick="rollDice()">🎲</button>
+    <button onclick="resetAll()">Reset</button>
   </div>
 
 </div>
@@ -249,18 +210,18 @@ const stats=["alpha","beta","omega","vol"];
 
 function change(p,s,v){
   const el=document.getElementById(`${p}_${s}`);
-  let value=Number(el.textContent)+v;
-  if(value<0) value=0;
-  if(s!=="vol" && value>5) value=5;
-  el.textContent=value;
+  let val=Number(el.textContent)+v;
+  if(val<0) val=0;
+  if(s!=="vol" && val>5) val=5;
+  el.textContent=val;
   save();
 }
 
 function rollDice(){
-  const dice=document.getElementById("dice");
+  const d=document.getElementById("dice");
   let c=0;
   const a=setInterval(()=>{
-    dice.textContent=Math.floor(Math.random()*6)+1;
+    d.textContent=Math.floor(Math.random()*6)+1;
     if(++c>10) clearInterval(a);
   },60);
 }
@@ -272,6 +233,25 @@ function resetAll(){
     });
   });
   save();
+}
+
+function setTheme(t){
+  if(t==="dark"){
+    document.documentElement.style.setProperty("--bg","#000");
+    document.documentElement.style.setProperty("--card","#111");
+    document.documentElement.style.setProperty("--text","#fff");
+    document.documentElement.style.setProperty("--border","#333");
+  }else if(t==="green"){
+    document.documentElement.style.setProperty("--bg","#e8f5e9");
+    document.documentElement.style.setProperty("--card","#ffffff");
+    document.documentElement.style.setProperty("--text","#1b5e20");
+    document.documentElement.style.setProperty("--border","#81c784");
+  }else{
+    document.documentElement.style.setProperty("--bg","#f4f4f4");
+    document.documentElement.style.setProperty("--card","#ffffff");
+    document.documentElement.style.setProperty("--text","#000");
+    document.documentElement.style.setProperty("--border","#ccc");
+  }
 }
 
 function save(){
@@ -294,25 +274,6 @@ function load(){
       document.getElementById(`${p}_${s}`).textContent=d[p][s]||0;
     });
   });
-}
-
-function setTheme(t){
-  if(t==="dark"){
-    document.documentElement.style.setProperty("--bg","#000");
-    document.documentElement.style.setProperty("--card","#111");
-    document.documentElement.style.setProperty("--text","#fff");
-    document.documentElement.style.setProperty("--border","#333");
-  }else if(t==="green"){
-    document.documentElement.style.setProperty("--bg","#e8f5e9");
-    document.documentElement.style.setProperty("--card","#ffffff");
-    document.documentElement.style.setProperty("--text","#1b5e20");
-    document.documentElement.style.setProperty("--border","#81c784");
-  }else{
-    document.documentElement.style.setProperty("--bg","#f4f4f4");
-    document.documentElement.style.setProperty("--card","#ffffff");
-    document.documentElement.style.setProperty("--text","#000");
-    document.documentElement.style.setProperty("--border","#ccc");
-  }
 }
 
 document.addEventListener("input",save);
