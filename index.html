@@ -30,8 +30,6 @@ body.green{
 html, body{
   margin:0;
   padding:0;
-  height:100%;
-  overflow:hidden;
 }
 
 body{
@@ -40,35 +38,21 @@ body{
   font-family:sans-serif;
 }
 
+/* ===== 全体 ===== */
 .app{
-  height:100%;
+  min-height:100svh; /* Safari対策 */
   display:flex;
   flex-direction:column;
-}
-
-/* ===== 上部操作 ===== */
-.top{
-  display:flex;
-  justify-content:space-around;
-  padding:6px;
-  background:var(--card);
-  border-bottom:2px solid var(--border);
-}
-
-.top button{
-  font-size:14px;
-  padding:6px 10px;
 }
 
 /* ===== プレイヤー ===== */
 .player{
-  flex:1;
   background:var(--card);
   border-bottom:2px solid var(--border);
-  padding:6px;
+  padding:8px;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  gap:8px;
 }
 
 .name{
@@ -122,40 +106,37 @@ body{
 .omega{ color:#8e24aa; }
 .volc{ color:#fbc02d; }
 
-/* ===== 下部 ===== */
-.bottom{
-  padding:6px env(safe-area-inset-bottom);
-  background:var(--card);
-  border-top:2px solid var(--border);
+/* ===== 下操作 ===== */
+.controls{
   display:flex;
   justify-content:space-around;
   align-items:center;
+  padding:10px;
+  background:var(--card);
+  border-top:2px solid var(--border);
+}
+
+.controls button{
+  font-size:18px;
+  padding:8px 12px;
 }
 
 .dice{
-  font-size:38px;
+  font-size:36px;
 }
 
 /* ===== フッター ===== */
 .footer{
   font-size:11px;
-  text-align:center;
   color:#888;
-  padding:4px;
-  background:var(--bg);
+  text-align:center;
+  padding:6px;
 }
 </style>
 </head>
 
 <body>
 <div class="app">
-
-  <div class="top">
-    <button onclick="setMode('')">白</button>
-    <button onclick="setMode('dark')">黒</button>
-    <button onclick="setMode('green')">緑</button>
-    <button onclick="resetAll()">Reset</button>
-  </div>
 
   <!-- Player 1 -->
   <div class="player">
@@ -227,9 +208,16 @@ body{
     </div>
   </div>
 
-  <div class="bottom">
+  <!-- 下操作 -->
+  <div class="controls">
+    <button onclick="setMode('')">☀️</button>
+    <button onclick="setMode('dark')">🌙</button>
+    <button onclick="setMode('green')">🌿</button>
+
     <div class="dice" id="dice">–</div>
     <button onclick="rollDice()">🎲</button>
+
+    <button onclick="resetAll()">Reset</button>
   </div>
 
   <div class="footer">
