@@ -2,56 +2,69 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>神椿TCG 魔力管理（Mobile）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>神椿TCG 魔力管理（スマホ）</title>
 
 <style>
-*{ box-sizing:border-box; }
+:root{
+  --bg:#f4f4f4;
+  --card:#ffffff;
+  --text:#000;
+  --border:#ccc;
+}
+
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#fff;
+  --border:#444;
+}
+
+body.green{
+  --bg:#E0F8E0;
+  --card:#f1fff3;
+  --text:#1b3c1b;
+  --border:#81c784;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
+}
 
 body{
-  margin:0;
-  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
   font-family:sans-serif;
-  background:#f4f4f4;
 }
 
-/* ===== 画面固定 ===== */
-#top, #middle, #bottom{
-  position:fixed;
-  left:0;
-  width:100%;
-}
-
-/* ===== 上半分 ===== */
-#top{
-  top:0;
-  height:42%;
-  background:#fff;
-  border-bottom:1px solid #ccc;
-}
-
-/* ===== 下半分 ===== */
-#middle{
-  top:42%;
-  height:42%;
-  background:#fff;
-  border-bottom:1px solid #ccc;
-}
-
-/* ===== 操作バー ===== */
-#bottom{
-  bottom:0;
-  height:16%;
-  background:#fff;
-  border-top:1px solid #ccc;
+.app{
+  height:100%;
   display:flex;
-  align-items:center;
+  flex-direction:column;
+}
+
+/* ===== 上部操作 ===== */
+.top{
+  display:flex;
   justify-content:space-around;
+  padding:6px;
+  background:var(--card);
+  border-bottom:2px solid var(--border);
+}
+
+.top button{
+  font-size:14px;
+  padding:6px 10px;
 }
 
 /* ===== プレイヤー ===== */
 .player{
-  height:100%;
+  flex:1;
+  background:var(--card);
+  border-bottom:2px solid var(--border);
   padding:6px;
   display:flex;
   flex-direction:column;
@@ -59,10 +72,12 @@ body{
 }
 
 .name{
+  font-size:22px;
   text-align:center;
-  font-size:18px;
   border:none;
+  background:transparent;
   font-weight:bold;
+  color:var(--text);
 }
 
 /* ===== VOL ===== */
@@ -71,13 +86,14 @@ body{
 }
 
 .vol .value{
-  font-size:36px;
+  font-size:46px;
 }
 
 .vol button{
-  width:52px;
-  height:52px;
-  font-size:24px;
+  width:72px;
+  height:72px;
+  font-size:28px;
+  margin:0 12px;
 }
 
 /* ===== 魔力 ===== */
@@ -91,38 +107,67 @@ body{
 }
 
 .stat .value{
-  font-size:22px;
+  font-size:26px;
 }
 
 .stat button{
-  width:44px;
-  height:44px;
-  font-size:20px;
+  width:60px;
+  height:60px;
+  font-size:24px;
 }
 
 /* ===== 色 ===== */
-.alpha{color:#e53935;}
-.beta{color:#1e88e5;}
-.omega{color:#8e24aa;}
-.volc{color:#2e7d32;}
+.alpha{ color:#e53935; }
+.beta{ color:#1e88e5; }
+.omega{ color:#8e24aa; }
+.volc{ color:#fbc02d; }
+
+/* ===== 下部 ===== */
+.bottom{
+  padding:6px env(safe-area-inset-bottom);
+  background:var(--card);
+  border-top:2px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
 
 .dice{
-  font-size:32px;
+  font-size:38px;
+}
+
+/* ===== フッター ===== */
+.footer{
+  font-size:11px;
+  text-align:center;
+  color:#888;
+  padding:4px;
+  background:var(--bg);
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<div id="top">
+  <div class="top">
+    <button onclick="setMode('')">白</button>
+    <button onclick="setMode('dark')">黒</button>
+    <button onclick="setMode('green')">緑</button>
+    <button onclick="resetAll()">Reset</button>
+  </div>
+
+  <!-- Player 1 -->
   <div class="player">
     <input class="name" id="p1_name" placeholder="Player 1">
 
     <div class="vol volc">
       <div>VOL</div>
       <div class="value" id="p1_vol">0</div>
-      <button onclick="change('p1','vol',-1)">－</button>
-      <button onclick="change('p1','vol',1)">＋</button>
+      <div>
+        <button onclick="change('p1','vol',-1)">－</button>
+        <button onclick="change('p1','vol',1)">＋</button>
+      </div>
     </div>
 
     <div class="stats">
@@ -146,17 +191,18 @@ body{
       </div>
     </div>
   </div>
-</div>
 
-<div id="middle">
+  <!-- Player 2 -->
   <div class="player">
     <input class="name" id="p2_name" placeholder="Player 2">
 
     <div class="vol volc">
       <div>VOL</div>
       <div class="value" id="p2_vol">0</div>
-      <button onclick="change('p2','vol',-1)">－</button>
-      <button onclick="change('p2','vol',1)">＋</button>
+      <div>
+        <button onclick="change('p2','vol',-1)">－</button>
+        <button onclick="change('p2','vol',1)">＋</button>
+      </div>
     </div>
 
     <div class="stats">
@@ -180,15 +226,17 @@ body{
       </div>
     </div>
   </div>
-</div>
 
-<div id="bottom">
-  <button onclick="setTheme('white')">🤍</button>
-  <button onclick="setTheme('dark')">🌙</button>
-  <button onclick="setTheme('green')">🌿</button>
-  <div class="dice" id="dice">–</div>
-  <button onclick="rollDice()">🎲</button>
-  <button onclick="resetAll()">Reset</button>
+  <div class="bottom">
+    <div class="dice" id="dice">–</div>
+    <button onclick="rollDice()">🎲</button>
+  </div>
+
+  <div class="footer">
+    ※このサイトは非公式のファンメイドツール（ファンサイト）です。<br>
+    神椿スタジオおよび公式TCGとは一切関係ありません。
+  </div>
+
 </div>
 
 <script>
@@ -196,18 +244,19 @@ const stats=["alpha","beta","omega","vol"];
 
 function change(p,s,v){
   const el=document.getElementById(`${p}_${s}`);
-  let n=Number(el.textContent)+v;
-  if(n<0) n=0;
-  if(s!=="vol" && n>5) n=5;
-  el.textContent=n;
+  let val=Number(el.textContent)+v;
+  if(val<0) val=0;
+  if(s!=="vol" && val>5) val=5;
+  el.textContent=val;
+  save();
 }
 
 function rollDice(){
   const d=document.getElementById("dice");
-  let c=0;
-  const a=setInterval(()=>{
+  let i=0;
+  const t=setInterval(()=>{
     d.textContent=Math.floor(Math.random()*6)+1;
-    if(++c>10) clearInterval(a);
+    if(++i>10) clearInterval(t);
   },60);
 }
 
@@ -217,14 +266,40 @@ function resetAll(){
       document.getElementById(`${p}_${s}`).textContent=0;
     });
   });
+  save();
 }
 
-function setTheme(t){
-  if(t==="dark") document.body.style.background="#000";
-  if(t==="green") document.body.style.background="#e8f5e9";
-  if(t==="white") document.body.style.background="#f4f4f4";
+function setMode(mode){
+  document.body.classList.remove("dark","green");
+  if(mode) document.body.classList.add(mode);
+  save();
 }
+
+function save(){
+  const data={mode:document.body.className};
+  ["p1","p2"].forEach(p=>{
+    data[p]={name:document.getElementById(`${p}_name`).value};
+    stats.forEach(s=>{
+      data[p][s]=document.getElementById(`${p}_${s}`).textContent;
+    });
+  });
+  localStorage.setItem("kamitsubaki_sp",JSON.stringify(data));
+}
+
+function load(){
+  const d=JSON.parse(localStorage.getItem("kamitsubaki_sp"));
+  if(!d) return;
+  document.body.className=d.mode||"";
+  ["p1","p2"].forEach(p=>{
+    document.getElementById(`${p}_name`).value=d[p]?.name||"";
+    stats.forEach(s=>{
+      document.getElementById(`${p}_${s}`).textContent=d[p]?.[s]||0;
+    });
+  });
+}
+
+document.addEventListener("input",save);
+load();
 </script>
-
 </body>
 </html>
